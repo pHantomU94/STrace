@@ -2,6 +2,7 @@ import time
 import pandas as pd
 import os
 import json
+import random
 from sys import maxsize
 
 def get_last_line(filename):
@@ -138,6 +139,8 @@ class Transfer(object):
 
     def metrics2flows(self):
         self.flows = [] 
+        sp = random.randint(1000,65535)
+        dp = random.randint(1000,65535)
         #record every flow info
         for (src,dst,sid), group in self.data.groupby(['src', 'dst', 'sid']):
             while group.size > 0:
@@ -145,8 +148,8 @@ class Transfer(object):
                 flow.src = src
                 flow.dst = dst
                 flow.sid = sid
-                flow.sp = 33333
-                flow.dp = 22222    
+                flow.sp = sp    ##HC##
+                flow.dp = dp    ##hc##
                 tag = self.appID + str(sid)
                 flow.tag = tag.split('-')[1]+tag.split('-')[2]
                 flow.sid = sid

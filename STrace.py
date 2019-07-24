@@ -14,27 +14,27 @@ class Executor(object):
             print(appID+'...')
             path = self.Logpath + appID + '/'
             filelist = os.listdir(path)
-            if 'flowtrace' in filelist:
-                continue
+            # if 'flowtrace' in filelist:
+            #     continue
+            # else:
+            if 'logs.txt' not in filelist:
+                continue 
             else:
-                if 'logs.txt' not in filelist:
-                    continue 
-                else:
-                    app = {}    
-                    tf = Transfer(Logpath,appID)
-                    tf.log2metrics()
-                    flows = tf.metrics2flows()
-                    app['appID'] = appID
-                    app['duration'] = tf.duration 
-                    app['flows'] = flows
-                    appsinfo.append(app)
-                    flowtrace = path + 'flowtrace'
-                    with open(flowtrace,'w') as tracefile:
-                        line = appID + ' ' + str(tf.duration) + '\n'
+                app = {}    
+                tf = Transfer(Logpath,appID)
+                tf.log2metrics()
+                flows = tf.metrics2flows()
+                app['appID'] = appID
+                app['duration'] = tf.duration 
+                app['flows'] = flows
+                appsinfo.append(app)
+                flowtrace = path + 'flowtrace'
+                with open(flowtrace,'w') as tracefile:
+                    line = appID + ' ' + str(tf.duration) + '\n'
+                    tracefile.write(line)
+                    for flow in flows:
+                        line = str(flow.rtime)+ ' ' + str(flow.src)+ ' ' + str(flow.dst)+ ' ' + str              (flow.size)+ ' ' + str(flow.sp)+ ' ' + str(flow.dp)+ ' ' + str(flow.tag)+ '\n'
                         tracefile.write(line)
-                        for flow in flows:
-                            line = str(flow.rtime)+ ' ' + str(flow.src)+ ' ' + str(flow.dst)+ ' ' + str              (flow.size)+ ' ' + str(flow.sp)+ ' ' + str(flow.dp)+ ' ' + str(flow.tag)+ '\n'
-                            tracefile.write(line)
             print('Done...')
         
 class Scheduler(object):
